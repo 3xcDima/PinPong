@@ -49,25 +49,40 @@ class Enemy(GameSprite):
         if self.rect.y < window_height:
             self.rect.y += self.player_speed_y
 
+font.init()
+font = font.Font(None, 75)
 
 player1 = Player(10,10,250,"racket.png", 50, 125,0)
 player2 = Player(10, 640, 250,"racket.png", 50, 125,0)
-ball = Enemy(10, 350,250,"tenis_ball.png", 60, 60, 10)
+ball = Enemy(10, 350,250,"tenis_ball.png", 60, 60, 3)
 game = True
 finish = False
 while game:
-    window.fill((0, 255, 255))
-    player1.reset()
-    player1.update()
-    player2.reset()
-    player2.update2()
-    ball.reset()
-    ball.update()
-    print(ball.rect.y)
-    if sprite.collide_rect(player1, ball) or sprite.collide_rect(player2, ball):
-        ball.player_speed *= -1
-    if not(ball.rect.y >= 0 and ball.rect.y <= window_height- 60):
-        ball.player_speed_y *= -1
+    if not(finish):
+
+        window.fill((0, 255, 255))
+        player1.reset()
+        player1.update()
+        player2.reset()
+        player2.update2()
+        ball.reset()
+        ball.update()
+        print(ball.rect.y)
+        if sprite.collide_rect(player1, ball) or sprite.collide_rect(player2, ball):
+            ball.player_speed *= -1
+        if not(ball.rect.y >= 0 and ball.rect.y <= window_height- 60):
+            ball.player_speed_y *= -1
+        if ball.rect.x <= 0:
+            finish = True
+            loser = font.render("Игрок справа победил", True, (0, 0, 0))
+
+            window.blit(loser, (100, 200))
+
+        if ball.rect.x >= window_weight:
+            finish = True
+            loser = font.render("Игрок слева победил", True, (0, 0, 0))
+            window.blit(loser, (100, 200))
+
     for e in event.get():
         if e.type == QUIT:
             game = False
