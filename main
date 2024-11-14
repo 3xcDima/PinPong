@@ -1,0 +1,60 @@
+from pygame import *
+from time import time as t
+mixer.init()
+from random import *
+
+window_height = 500
+window_weight = 700
+window = display.set_mode((window_weight, window_height))
+display.set_caption("Pin Pong")
+
+
+clock = time.Clock()
+FPS = 40
+
+
+class GameSprite(sprite.Sprite):
+    def __init__(self, player_speed, player_x, player_y, player_image):
+        super().__init__()
+        self.player_speed = player_speed
+        self.image = transform.scale(image.load(player_image), (50, 125))
+        self.rect = self.image.get_rect()
+        self.rect.x = player_x
+        self.rect.y = player_y
+
+
+    def reset(self):
+        window.blit(self.image, (self.rect.x, self.rect.y))
+
+
+class Player(GameSprite):
+
+    def update(self):
+        keys_pressed = key.get_pressed()
+        if keys_pressed[K_w] and self.rect.y < window_weight-65:
+            self.rect.y += 10
+        if keys_pressed[K_s] and self.rect.y > 0:
+            self.rect.y -= 10
+    def update2(self):
+        keys_pressed = key.get_pressed()
+        if keys_pressed[K_UP] and self.rect.y < window_weight-65:
+            self.rect.y += 10
+        if keys_pressed[K_DOWN] and self.rect.y > 0:
+            self.rect.y -= 10
+
+player1 = Player(10,10,250,"racket.png")
+player2 = Player(10, 640, 250,"racket.png")
+game = True
+finish = False
+while game:
+    window.fill((0, 255, 255))
+    player1.reset()
+    player1.update()
+    player2.reset()
+    player2.update2()
+    for e in event.get():
+        if e.type == QUIT:
+            game = False
+    clock.tick(FPS)
+    display.update()
+#dddddd
